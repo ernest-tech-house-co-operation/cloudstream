@@ -34,6 +34,9 @@ jobs:
       - name: Decode keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > "${RUNNER_TEMP}/keystore.jks"
 
+      - name: Debug key length
+        run: echo -n "${{ secrets.GRADLE_ENCRYPTION_KEY }}" | wc -c
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
         with:
