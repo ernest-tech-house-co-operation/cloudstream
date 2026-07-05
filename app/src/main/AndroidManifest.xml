@@ -2,32 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- I dont remember, probs has to do with downloads -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- unless you only use cs3 as a player for downloaded stuff, you need this -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Downloads -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Downloads on low api devices -->
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" /> <!-- Plugin API -->
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /> <!-- Used for player vertical slide -->
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /> <!-- Used for app update -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!-- Used for app notifications on Android 13+ -->
-    <uses-permission android:name="com.android.providers.tv.permission.WRITE_EPG_DATA" /> <!-- Used for Android TV watch next -->
-    <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" /> <!-- Used for updates without prompt -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- Used for update service -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="com.android.providers.tv.permission.WRITE_EPG_DATA" />
+    <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- We can use this directly as CS3 is not on Play Store -->
-    <uses-permission android:name="com.android.providers.tv.permission.READ_EPG_DATA" />  <!-- We can use to read the tv channel list -->
-    <!-- Required for OpenInAppAction and getting arbitrary Aniyomi packages  -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="com.android.providers.tv.permission.READ_EPG_DATA" />
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
 
     <queries>
-        <!-- 
-            QUERY_ALL_PACKAGES does not work on some devices running Android 11+ (like Google TV 14), 
-            so we must explicitly specify the packages and intent patterns we query to ensure visibility.
-        -->
-        <!-- For external video players -->
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <data android:mimeType="video/*" />
@@ -45,7 +39,6 @@
             <data android:scheme="magnet" />
         </intent>
 
-        <!-- Common players supported in actions/temp -->
         <package android:name="org.videolan.vlc" />
         <package android:name="org.videolan.vlc.debug" />
         <package android:name="is.xyz.mpv" />
@@ -57,13 +50,11 @@
         <package android:name="dev.anilbeesetti.nextplayer" />
         <package android:name="com.instantbits.cast.webvideo" />
         <package android:name="com.gianlu.aria2android" />
-        
-        <!-- Torrent clients -->
+
         <package android:name="org.proninyaroslav.libretorrent" />
         <package android:name="com.biglybt.android.client" />
     </queries>
 
-    <!-- Fixes android tv fuckery -->
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
@@ -71,8 +62,6 @@
         android:name="android.software.leanback"
         android:required="false" />
 
-    <!-- Without the large heap Exoplayer buffering gets reset due to OOM. -->
-    <!--TODO https://stackoverflow.com/questions/41799732/chromecast-button-not-visible-in-android-->
     <application
         android:name=".CloudStreamApp"
         android:allowBackup="true"
@@ -110,48 +99,26 @@
             tools:ignore="DiscouragedApi">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:scheme="content" />
                 <data android:mimeType="video/*" />
             </intent-filter>
 
-            <!-- I dont think this label can be translated, but idk -->
             <intent-filter android:label="@string/play_with_app_name">
                 <action android:name="android.intent.action.SEND" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="*/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.OPEN_DOCUMENT" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="magnet" />
             </intent-filter>
-            <!--<intent-filter tools:ignore="AppLinkUrlError">
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.SEND" />
-                <action android:name="android.intent.action.OPEN_DOCUMENT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="application/x-bittorrent" />
-            </intent-filter>-->
         </activity>
-        <!--
-        android:launchMode="singleTask"
-        is a bit experimental, it makes loading repositories from browser still stay on the same page
-        no idea about side effects
 
-        Not exported to prevent bypassing the AccountSelectActivity
-        -->
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|navigation|uiMode"
@@ -166,7 +133,6 @@
             android:exported="true">
             <intent-filter android:exported="true">
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
@@ -175,68 +141,47 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
-            <!-- cloudstreamplayer://encodedUrl?name=Dune -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="cloudstreamplayer" />
+                <data android:scheme="nothingplayer" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="cloudstreamapp" />
+                <data android:scheme="nothingapp" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="cloudstreamrepo" />
+                <data android:scheme="nothingrepo" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="csshare" />
+                <data android:scheme="nothingshare" />
             </intent-filter>
-            <!-- Allow searching with intents: cloudstreamsearch://Your%20Name -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="cloudstreamsearch" />
+                <data android:scheme="nothingsearch" />
             </intent-filter>
-
-            <!--
-            Allow opening from continue watching with intents: cloudstreamsearch://1234
-            Used on Android TV Watch Next
-             -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="cloudstreamcontinuewatching" />
+                <data android:scheme="nothingcontinuewatching" />
             </intent-filter>
 
             <intent-filter android:autoVerify="false">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="cs.repo"
                     android:pathPrefix="/"
@@ -265,7 +210,6 @@
             android:foregroundServiceType="dataSync"
             android:exported="false" />
 
-        <!-- Necessary for WorkManager services: https://stackoverflow.com/a/77186316 -->
         <service
             android:name="androidx.work.impl.foreground.SystemForegroundService"
             android:foregroundServiceType="dataSync"
@@ -291,5 +235,5 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
-    
+
 </manifest>

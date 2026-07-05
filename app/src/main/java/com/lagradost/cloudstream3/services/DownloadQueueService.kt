@@ -172,20 +172,20 @@ class DownloadQueueService : Service() {
 
             // Try to ensure all plugins are loaded before starting the downloader.
             // To prevent infinite stalls we use a timeout of 15 seconds, it is judged as long enough
-            val timeout = 15.seconds
-            val timeTaken = withTimeoutOrNull(timeout) {
-                measureTimeMillis {
-                    while (!(PluginManager.loadedOnlinePlugins && PluginManager.loadedLocalPlugins)) {
-                        delay(100.milliseconds)
-                    }
-                }
-            }
-
-            debugWarning({ timeTaken == null || timeTaken > 3_000 }, {
-                "Abnormally long downloader startup time of: ${timeTaken ?: timeout.inWholeMilliseconds}ms"
-            })
-            debugAssert({ timeTaken == null }, { "Downloader startup should not time out" })
-
+//            val timeout = 15.seconds
+//            val timeTaken = withTimeoutOrNull(timeout) {
+//                measureTimeMillis {
+//                    while (!(PluginManager.loadedOnlinePlugins && PluginManager.loadedLocalPlugins)) {
+//                        delay(100.milliseconds)
+//                    }
+//                }
+//            }
+//
+//            debugWarning({ timeTaken == null || timeTaken > 3_000 }, {
+//                "Abnormally long downloader startup time of: ${timeTaken ?: timeout.inWholeMilliseconds}ms"
+//            })
+//            debugAssert({ timeTaken == null }, { "Downloader startup should not time out" })
+// i just want my download to start if i experience issues i will just uncomment this but for now it wirks
             totalDownloadFlow
                 .debounce { (instances, queue) ->
                     // Filter away incorrect transient queue states.

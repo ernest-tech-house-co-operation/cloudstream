@@ -83,28 +83,48 @@
         <Preference
             android:icon="@drawable/ic_github_logo"
             android:title="@string/github"
-            app:summary="https://github.com/recloudstream/cloudstream">
+            app:summary="https://github.com/ernest-tech-house-co-operation/cloudstream">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://github.com/recloudstream/cloudstream" />
+                android:data="https://github.com/ernest-tech-house-co-operation/cloudstream" />
         </Preference>
 
         <Preference
-            android:icon="@drawable/quick_novel_icon"
-            android:title="@string/lightnovel"
-            app:summary="https://github.com/LagradOst/QuickNovel">
+            android:icon="@drawable/ic_telegram"
+            android:title="Telegram"
+            app:summary="https://t.me/ernesttechhouse">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://github.com/LagradOst/QuickNovel" />
+                android:data="https://t.me/ernesttechhouse" />
         </Preference>
+
         <Preference
             android:icon="@drawable/ic_baseline_discord_24"
             android:title="@string/discord"
-            app:summary="https://discord.gg/5Hus6fM">
+            app:summary="https://discord.gg/N3Xj3ZRZv">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://discord.gg/5Hus6fM" />
+                android:data="https://discord.gg/N3Xj3ZRZv" />
         </Preference>
+
+        <Preference
+            android:icon="@drawable/ic_youtube"
+            android:title="youtube"
+            app:summary="https://www.youtube.com/@ErnestTechHouse">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://www.youtube.com/@ErnestTechHouse" />
+        </Preference>
+
+        <Preference
+            android:icon="@drawable/ic_whatsapp"
+            android:title="whatsapp"
+            app:summary="https://whatsapp.com/channel/0029VbBzoXuCxoArtvaslR0U">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://whatsapp.com/channel/0029VbBzoXuCxoArtvaslR0U" />
+        </Preference>
+
         <Preference
             android:icon="@drawable/baseline_description_24"
             android:title="@string/cs3wiki"
