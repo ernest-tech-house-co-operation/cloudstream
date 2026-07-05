@@ -38,6 +38,7 @@ Extensions, sources, and recommended repositories are not officially moderated o
 + Chromecast
 + Extension system for personal customization
 + Ships with a default plugin repository (MegaRepo) so you can start browsing immediately
++ best streaming experience 
 
 <a id="install_rules"></a>
 
