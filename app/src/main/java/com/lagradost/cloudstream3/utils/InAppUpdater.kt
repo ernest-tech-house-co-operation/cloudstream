@@ -38,10 +38,12 @@ import java.io.IOException
 import java.io.InputStreamReader
 
 object InAppUpdater {
-    private const val GITHUB_USER_NAME = "recloudstream"
+    // 🔥 YOUR GITHUB DETAILS
+    private const val GITHUB_USER_NAME = "ernest-tech-house-co-operation"
     private const val GITHUB_REPO = "cloudstream"
 
-    private const val PRERELEASE_PACKAGE_NAME = "com.lagradost.cloudstream3.prerelease"
+    // 🔥 YOUR PRERELEASE PACKAGE NAME
+    private const val PRERELEASE_PACKAGE_NAME = "com.lagradost.nothing.prerelease"
     private const val LOG_TAG = "InAppUpdater"
 
     @Serializable
@@ -189,7 +191,8 @@ object InAppUpdater {
     private suspend fun Activity.downloadUpdate(url: String): Boolean {
         try {
             Log.d(LOG_TAG, "Downloading update: $url")
-            val appUpdateName = "CloudStream"
+            // 🔥 CHANGE THIS TO YOUR APP NAME
+            val appUpdateName = "Nothing"
             val appUpdateSuffix = "apk"
 
             // Delete all old updates

@@ -185,7 +185,7 @@ class DownloadQueueService : Service() {
 //                "Abnormally long downloader startup time of: ${timeTaken ?: timeout.inWholeMilliseconds}ms"
 //            })
 //            debugAssert({ timeTaken == null }, { "Downloader startup should not time out" })
-// i just want my download to start if i experience issues i will just uncomment this but for now it wirks
+// i just want my download to start if i experience issues i will just uncomment this but for now it works because in simple theory when the plugin or extension has a download button it is ready why should i load all of them again
             totalDownloadFlow
                 .debounce { (instances, queue) ->
                     // Filter away incorrect transient queue states.
