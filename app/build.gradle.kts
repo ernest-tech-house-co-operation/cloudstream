@@ -86,11 +86,11 @@ android {
         // We just use SIGNING_KEY_ALIAS here since it won't change
         // so won't kill the configuration cache.
         if (System.getenv("SIGNING_KEY_ALIAS") != null) {
-            create("prerelease") {
+            create("release") {
                 val tmpFilePath = System.getProperty("user.home") + "/work/_temp/keystore/"
-                val prereleaseStoreFile: File? = File(tmpFilePath).listFiles()?.first()
+                val storeFileFound: File? = File(tmpFilePath).listFiles()?.first()
 
-                storeFile = prereleaseStoreFile?.let { file(it) }
+                storeFile = storeFileFound?.let { file(it) }
                 storePassword = System.getenv("SIGNING_STORE_PASSWORD")
                 keyAlias = System.getenv("SIGNING_KEY_ALIAS")
                 keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
@@ -145,6 +145,9 @@ android {
             isDebuggable = false
             isMinifyEnabled = false
             isShrinkResources = false
+            if (signingConfigs.names.contains("release")) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -168,13 +171,17 @@ android {
         create("prerelease") {
             dimension = "state"
             applicationIdSuffix = ".prerelease"
-            if (signingConfigs.names.contains("prerelease")) {
-                signingConfig = signingConfigs.getByName("prerelease")
-            } else {
-                logger.warn("No prerelease signing config!")
-            }
             versionNameSuffix = "-PRE"
             versionCode = (System.currentTimeMillis() / 60000).toInt()
+        }
+    }
+
+    applicationVariants.all {
+        outputs.all {
+            val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            if (buildType.name == "release" && productFlavors.any { it.name == "stable" }) {
+                output.outputFileName = "Nothing-${versionName}.apk"
+            }
         }
     }
 
@@ -346,7 +353,7 @@ dokka {
 
             sourceLink {
                 localDirectory = file("..")
-                remoteUrl("https://github.com/recloudstream/cloudstream/tree/master")
+                remoteUrl("https://github.com/ernest-tech-house-co-operation/cloudstream.git")
                 remoteLineSuffix = "#L"
             }
         }
