@@ -79,12 +79,6 @@ android {
                 generateGitHash,
                 GenerateGitHashTask::outputDir
             )
-
-            if (variant.buildType == "release" && variant.flavorName == "stable") {
-                variant.outputs.forEach { output ->
-                    output.outputFileName.set("Nothing-${variant.versionName.get()}.apk")
-                }
-            }
         }
     }
 
