@@ -1480,8 +1480,21 @@ object VideoDownloadManager {
         notificationCallback: (Int, Notification) -> Unit,
         tryResume: Boolean = false,
     ): DownloadStatus {
-        // no support for these file formats
-        if (link.type == ExtractorLinkType.MAGNET || link.type == ExtractorLinkType.TORRENT || link.type == ExtractorLinkType.DASH) {
+        // Resolve magnet/torrent links into a real downloadable URL via TorrServer first
+        val resolvedLink = if (link.type == ExtractorLinkType.MAGNET || link.type == ExtractorLinkType.TORRENT) {
+            try {
+                val (newLink, _) = com.lagradost.cloudstream3.ui.player.Torrent.transformLink(link)
+                newLink
+            } catch (t: Throwable) {
+                logError(t)
+                return DOWNLOAD_INVALID_INPUT
+            }
+        } else {
+            link
+        }
+
+        // DASH is still unsupported
+        if (resolvedLink.type == ExtractorLinkType.DASH) {
             return DOWNLOAD_INVALID_INPUT
         }
 
@@ -1489,8 +1502,8 @@ object VideoDownloadManager {
 
         // Make sure this is cancelled when download is done or cancelled.
         val extractorJob = ioSafe {
-            if (link.extractorData != null) {
-                getApiFromNameNull(link.source)?.extractorVerifierJob(link.extractorData)
+            if (resolvedLink.extractorData != null) {
+                getApiFromNameNull(resolvedLink.source)?.extractorVerifierJob(resolvedLink.extractorData)
             }
         }
 
@@ -1499,7 +1512,7 @@ object VideoDownloadManager {
                 createDownloadNotification(
                     context,
                     source,
-                    link.name,
+                    resolvedLink.name,
                     ep,
                     meta.type,
                     meta.bytesDownloaded,
@@ -1513,7 +1526,7 @@ object VideoDownloadManager {
         }
 
         try {
-            when (link.type) {
+            when (resolvedLink.type) {
                 ExtractorLinkType.M3U8 -> {
                     val startIndex = if (tryResume) {
                         context.getKey<DownloadedFileInfo>(
@@ -1525,7 +1538,7 @@ object VideoDownloadManager {
 
                     return downloadHLS(
                         context,
-                        link,
+                        resolvedLink,
                         name,
                         folder ?: "",
                         ep.id,
@@ -1537,7 +1550,7 @@ object VideoDownloadManager {
                 ExtractorLinkType.VIDEO -> {
                     return downloadThing(
                         context,
-                        link,
+                        resolvedLink,
                         name,
                         folder ?: "",
                         "mp4",
@@ -1558,7 +1571,6 @@ object VideoDownloadManager {
             extractorJob.cancel()
         }
     }
-
 
     fun getDownloadFileInfo(
         context: Context,

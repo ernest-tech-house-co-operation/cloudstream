@@ -9,6 +9,7 @@ import com.lagradost.cloudstream3.mvvm.logError
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.ExtractorLinkType
 import com.lagradost.cloudstream3.utils.newExtractorLink
+import com.lagradost.cloudstream3.utils.downloader.DownloadFileManagement.getBasePath
 import torrServer.TorrServer
 import java.io.File
 import java.net.ConnectException
@@ -20,11 +21,15 @@ object Torrent {
     private const val TIMEOUT: Long = 3
     private const val TAG: String = "Torrent"
 
+    /** Resolves the user's configured download folder (same one normal downloads use) */
+    private fun getTorrentDirPath(): String? {
+        val act = CommonActivity.activity ?: return null
+        return "${act.filesDir}/torrent"
+    }
     /** Cleans up both old aria2c files and newer go server, (even if the new is also self cleaning) */
     @Throws
     fun deleteAllFiles(): Boolean {
-        val act = CommonActivity.activity ?: return false
-        val defaultDirectory = "${act.cacheDir.path}/$TORRENT_SERVER_PATH"
+        val defaultDirectory = getTorrentDirPath() ?: return false
         return File(defaultDirectory).deleteRecursively()
     }
 
@@ -215,9 +220,9 @@ object Torrent {
     /** Transforms a torrent link into a streamable link via the server */
     @Throws
     suspend fun transformLink(link: ExtractorLink): Pair<ExtractorLink, TorrentStatus> {
-        val act = CommonActivity.activity ?: throw IllegalArgumentException("No activity")
-        val defaultDirectory = "${act.cacheDir.path}/$TORRENT_SERVER_PATH"
-        File(defaultDirectory).mkdir()
+        val defaultDirectory = getTorrentDirPath()
+            ?: throw ErrorLoadingException("Unable to resolve download directory")
+        File(defaultDirectory).mkdirs()
         if (!setup(defaultDirectory)) {
             throw ErrorLoadingException("Unable to setup the torrent server")
         }

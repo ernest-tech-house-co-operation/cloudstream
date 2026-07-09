@@ -243,7 +243,6 @@ object CommonActivity {
 
     fun init(act: Activity) {
         setActivityInstance(act)
-        ioSafe { Torrent.deleteAllFiles() }
         val componentActivity = activity as? ComponentActivity ?: return
 
         componentActivity.updateLocale()
